@@ -1,4 +1,7 @@
-sites
+# Outfile
+dcc
+
+# Prerequisites
 *.d
 
 # Compiled Object files
