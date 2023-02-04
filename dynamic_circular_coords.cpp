@@ -1,34 +1,52 @@
 // windows specific headers
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__) // windows test
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
-#include <gl/glut.h> // glut, includes glu.h and gl.h
-#else // other than windows
-#include <GL/glut.h>  // GLUT, includes glu.h and gl.h
+#include <gl/glut.h> // includes glu.h and gl.h
+// linux specific headers
+#else
+#include <GL/glut.h>  // includes glu.h and gl.h
 #endif
 
 // standard library headers
-#include <iostream> // I/O
-#include <math.h>   // planned for PI, cos, sin
-#include <tuple>    // to pack coordinates
+#include <iostream>
+#include <stdlib.h>
+#include <math.h> 
 
-#define WINDOW_SIZE 640 // 1:1 resolution
 #define WINDOW_TITLE "Dynamic Circular Coordinates - Workspace - OpenGL (CPP)"
 
-#define TAU 2.0f*M_PI // "the ratio of the circumference to the radius of a circle"
+// 1:1 window resolution
+#define WINDOW_SIZE 640
 
-// Window repaint callback
+// math constant
+#define TAU 2.0f*M_PI
+// 4-d data point
+#define PNT_A [0.3, 0.6, 0.5, 0.8]
+// vertex count
+#define VERTICES 1000
+
+// window repaint callback
 void display() {
    glClearColor(0.7f, 0.7f, 0.7f, 0.0f);
    glClear(GL_COLOR_BUFFER_BIT);
-
+   GLfloat color = 0.0f;
    glBegin(GL_LINE_LOOP);
-      glColor3f(0.0f, 0.0f, 1.0f);
-      for (int i = 0; i < 1000; i++) {
-          glVertex2f(0.75 * sin(-i * TAU / 1000), 0.75 * cos(-i * TAU / 1000));
+      glColor3f(0.0f, 0.0f, color);
+      for (int i = 0; i < VERTICES; i++) {
+          glColor3f(0.0f, 0.0f, color+=0.001f);
+          GLfloat x = 0.75 * sin(i * TAU / VERTICES);
+          GLfloat y = 0.75 * cos(i * TAU / VERTICES);
+          glVertex2f(x, y);
+          printf("(x: %f, y: %f)\n", x, y);
       }
    glEnd();
 
    glFlush();
+}
+
+// keyboard callback
+void keyboard(unsigned char, int, int) {
+    printf("Exiting program\n");
+    exit(0);
 }
 
 // main routine
@@ -48,6 +66,7 @@ int main(int argc, char** argv) {
 
    glutCreateWindow(WINDOW_TITLE);
    glutDisplayFunc(display);
+   glutKeyboardFunc(keyboard);
    glutMainLoop();
    return 0;
 }
