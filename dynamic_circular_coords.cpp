@@ -14,17 +14,18 @@
 #define WINDOW_SIZE 640 // 1:1 resolution
 #define WINDOW_TITLE "Dynamic Circular Coordinates - Workspace - OpenGL (CPP)"
 
+#define TAU 2.0f*M_PI // "the ratio of the circumference to the radius of a circle"
+
 // Window repaint callback
 void display() {
-   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+   glClearColor(0.7f, 0.7f, 0.7f, 0.0f);
    glClear(GL_COLOR_BUFFER_BIT);
 
-   glBegin(GL_QUADS);
-      glColor3f(1.0f, 0.0f, 0.0f);
-      glVertex2f(-0.5f, -0.5f);
-      glVertex2f( 0.5f, -0.5f);
-      glVertex2f( 0.5f,  0.5f);
-      glVertex2f(-0.5f,  0.5f);
+   glBegin(GL_LINE_LOOP);
+      glColor3f(0.0f, 0.0f, 1.0f);
+      for (int i = 0; i < 1000; i++) {
+          glVertex2f(0.75 * sin(-i * TAU / 1000), 0.75 * cos(-i * TAU / 1000));
+      }
    glEnd();
 
    glFlush();
