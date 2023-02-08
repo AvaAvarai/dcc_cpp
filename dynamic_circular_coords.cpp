@@ -1,61 +1,58 @@
-// windows specific headers
+// --- os conditional includes ---
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #include <gl/glut.h> // includes glu.h and gl.h
-// linux specific headers
 #else
 #include <GL/glut.h>  // includes glu.h and gl.h
 #endif
-
-// standard library headers
+// --- standard includes ---
 #include <iostream>
 #include <stdlib.h>
-#include <math.h> 
+#include <math.h>
 
+// --- constants ---
 #define WINDOW_TITLE "Dynamic Circular Coordinates - Workspace - OpenGL (CPP)"
+#define WINDOW_SIZE  640
+#define TAU          2.0f*M_PI
+#define PNT_A        [0.3, 0.6, 0.5, 0.8]
+#define VERTICES     1000
+#define SCALE        0.85f
+#define GRAY         0.7f
 
-// 1:1 window resolution
-#define WINDOW_SIZE 640
-
-// math constant
-#define TAU 2.0f*M_PI
-// 4-d data point
-#define PNT_A [0.3, 0.6, 0.5, 0.8]
-// vertex count
-#define VERTICES 1000
-
-// window repaint callback
+// --- callback functions ---
 void display() {
-   glClearColor(0.7f, 0.7f, 0.7f, 0.0f);
+   glClearColor(GRAY, GRAY, GRAY, 1.0f);
    glClear(GL_COLOR_BUFFER_BIT);
-   GLfloat color = 0.0f;
+
    glBegin(GL_LINE_LOOP);
-      glColor3f(0.0f, 0.0f, color);
+      glColor3f(0.0f, 0.0f, 1.0f); 
+
       for (int i = 0; i < VERTICES; i++) {
-          glColor3f(0.0f, 0.0f, color+=0.001f);
-          GLfloat x = 0.75 * sin(i * TAU / VERTICES);
-          GLfloat y = 0.75 * cos(i * TAU / VERTICES);
+
+          GLfloat angle = i * (0.36);
+          printf("%f\n", angle);
+
+          glColor3f(0.0f, 0.0f, 1.0f);
+          GLfloat x = SCALE * sin(i * TAU / VERTICES);
+          GLfloat y = SCALE * cos(i * TAU / VERTICES);
           glVertex2f(x, y);
-          printf("(x: %f, y: %f)\n", x, y);
       }
    glEnd();
-
    glFlush();
 }
 
-// keyboard callback
 void keyboard(unsigned char, int, int) {
     printf("Exiting program\n");
     exit(0);
 }
 
-// main routine
+// --- main routine ---
 int main(int argc, char** argv) {
    glutInit(&argc, argv);
    glutInitWindowSize(WINDOW_SIZE, WINDOW_SIZE);
 
    // get screen sizes
-   int screen_width = glutGet(GLUT_SCREEN_WIDTH);
+   int screen_width  = glutGet(GLUT_SCREEN_WIDTH);
    int screen_height = glutGet(GLUT_SCREEN_HEIGHT);
 
    // calculate center location coordinate
